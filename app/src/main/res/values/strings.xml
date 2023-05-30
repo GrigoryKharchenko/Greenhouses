@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Greenhouses</string>
+    <string name="refresh">Обновить</string>
+    <string name="error">Извините, что-то пошло не так.\nМы работаем над тем, чтобы\nисправить это как можно скорее.</string>
+
+    <!-- Authorization -->
+    <string name="authorization_title">Авторизация пользователя</string>
+    <string name="authorization_hint_number_phone">Введите номер телефона</string>
+    <string name="authorization_send_code">Отправить код с подтверждением</string>
+
+    <!-- CodeConfirm -->
+    <string name="code_confirm">Введите код подтверждения</string>
+    <string name="send_code_confirm">Подтвердить код</string>
 </resources>
