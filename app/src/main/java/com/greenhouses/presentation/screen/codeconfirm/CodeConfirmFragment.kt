@@ -5,12 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.greenhouses.R
 import com.greenhouses.databinding.FragmentCodeConfirmBinding
 import com.greenhouses.extension.launchWhenStarted
+import com.greenhouses.extension.replaceFragmentWithArgs
+import com.greenhouses.presentation.screen.registration.RegistrationFragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -60,7 +64,7 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
             }
             btnRefresh.setOnClickListener {
                 binding.groupError.isVisible = false
-                binding.groupSuccess.isVisible = true
+                binding.tilCodeConform.isVisible = true
             }
         }
         launchWhenStarted(viewModel.state, ::handleState)
@@ -78,13 +82,23 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
                     binding.etCodeConform.setText("")
                 }
             }
-            CodeConfirmState.OpenRegistrationScreen -> {}
-            CodeConfirmState.OpenProfileScreen -> {}
+            CodeConfirmState.OpenRegistrationScreen -> {
+                openRegistrationScreen()
+            }
+            CodeConfirmState.OpenProfileScreen -> {
+            }
             CodeConfirmState.Error -> {
                 binding.groupError.isVisible = true
-                binding.groupSuccess.isVisible = false
+                binding.tilCodeConform.isVisible = false
             }
         }
+    }
+
+    private fun openRegistrationScreen() {
+        replaceFragmentWithArgs<RegistrationFragment>(
+            containerId = R.id.container,
+            args = bundleOf(PHONE_NUMBER to phoneNumber)
+        )
     }
 
     companion object {

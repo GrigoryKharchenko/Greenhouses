@@ -11,4 +11,14 @@
     <!-- CodeConfirm -->
     <string name="code_confirm">Введите код подтверждения</string>
     <string name="send_code_confirm">Подтвердить код</string>
+
+    <!-- Registration -->
+    <string name="registration_title_number_phone">Ваш номер телефона: %s</string>
+    <string name="registration">Регистрация</string>
+    <string name="registration_name">Введите имя</string>
+    <string name="registration_login">Введите логин</string>
+    <string name="registration_hint_login">Логин может содержать:\n- Заглавные и строчные латинские буквы\n- Цифры от 0 до 9\n- Символы: -_\n- Минимальное количество элементов: 5</string>
+    <string name="registration_register">Зарегистрироваться </string>
+    <string name="registration_name_error">Поле не может быть пустым</string>
+    <string name="registration_login_error">Некоректный логин</string>
 </resources>
