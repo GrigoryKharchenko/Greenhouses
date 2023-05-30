@@ -2,6 +2,7 @@
     <string name="app_name">Greenhouses</string>
     <string name="refresh">Обновить</string>
     <string name="error">Извините, что-то пошло не так.\nМы работаем над тем, чтобы\nисправить это как можно скорее.</string>
+    <string name="error_toast">Извините, что-то пошло не так.</string>
 
     <!-- Authorization -->
     <string name="authorization_title">Авторизация пользователя</string>
@@ -12,6 +13,17 @@
     <string name="code_confirm">Введите код подтверждения</string>
     <string name="send_code_confirm">Подтвердить код</string>
 
+    <!-- Profile -->
+    <string name="profile_title">Информация об аккаунте</string>
+    <string name="profile_title_phone">Номер телефона</string>
+    <string name="profile_title_name">Имя</string>
+    <string name="profile_title_login">Логин</string>
+    <string name="profile_title_zodiac">Знак зодиака</string>
+    <string name="profile_title_city">Город</string>
+    <string name="profile_title_birthday">Дата рождения</string>
+    <string name="profile_title_about">О себе</string>
+    <string name="profile_log_out">Выйти из аккаунта</string>
+
     <!-- Registration -->
     <string name="registration_title_number_phone">Ваш номер телефона: %s</string>
     <string name="registration">Регистрация</string>
@@ -21,4 +33,11 @@
     <string name="registration_register">Зарегистрироваться </string>
     <string name="registration_name_error">Поле не может быть пустым</string>
     <string name="registration_login_error">Некоректный логин</string>
+
+    <!-- EditProfile -->
+    <string name="edit_profile">Редактирование профиля</string>
+    <string name="menu">Menu</string>
+    <string name="edit_name">Введите имя</string>
+    <string name="edit_city">Введите город</string>
+    <string name="edit_birthday">Введите дату рождения</string>
 </resources>

@@ -13,7 +13,9 @@ import androidx.fragment.app.viewModels
 import com.greenhouses.R
 import com.greenhouses.databinding.FragmentCodeConfirmBinding
 import com.greenhouses.extension.launchWhenStarted
+import com.greenhouses.extension.replaceFragment
 import com.greenhouses.extension.replaceFragmentWithArgs
+import com.greenhouses.presentation.screen.profile.ProfileFragment
 import com.greenhouses.presentation.screen.registration.RegistrationFragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -86,6 +88,7 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
                 openRegistrationScreen()
             }
             CodeConfirmState.OpenProfileScreen -> {
+                openProfileScreen()
             }
             CodeConfirmState.Error -> {
                 binding.groupError.isVisible = true
@@ -99,6 +102,10 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
             containerId = R.id.container,
             args = bundleOf(PHONE_NUMBER to phoneNumber)
         )
+    }
+
+    private fun openProfileScreen() {
+        replaceFragment<ProfileFragment>(containerId = R.id.container)
     }
 
     companion object {

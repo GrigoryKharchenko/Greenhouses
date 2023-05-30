@@ -19,6 +19,9 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
+import ru.tinkoff.decoro.MaskImpl
+import ru.tinkoff.decoro.slots.PredefinedSlots
+import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 import javax.inject.Inject
 
 class AuthorizationFragment : Fragment(), HasAndroidInjector {
@@ -73,6 +76,9 @@ class AuthorizationFragment : Fragment(), HasAndroidInjector {
                 groupSuccess.isVisible = true
                 etContactNumber.setText("")
             }
+            val mask = MaskImpl(PredefinedSlots.RUS_PHONE_NUMBER, true)
+            val watcher = MaskFormatWatcher(mask)
+            watcher.installOn(etContactNumber)
         }
     }
 

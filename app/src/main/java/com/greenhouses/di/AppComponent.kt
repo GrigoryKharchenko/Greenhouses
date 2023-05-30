@@ -5,6 +5,7 @@ import com.greenhouses.GreenhousesApp
 import com.greenhouses.di.module.ActivityModule
 import com.greenhouses.di.module.FragmentModule
 import com.greenhouses.di.module.InteractorModule
+import com.greenhouses.di.module.ManagerModule
 import com.greenhouses.di.module.PreferenceModule
 import com.greenhouses.di.module.RepositoryModule
 import com.greenhouses.di.module.RetrofitModule
@@ -28,6 +29,7 @@ import javax.inject.Singleton
         ViewModelModule::class,
         RepositoryModule::class,
         InteractorModule::class,
+        ManagerModule::class
     ]
 )
 interface AppComponent : AndroidInjector<GreenhousesApp> {

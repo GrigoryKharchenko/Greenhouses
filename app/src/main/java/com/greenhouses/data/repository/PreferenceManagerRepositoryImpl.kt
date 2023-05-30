@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.greenhouses.domain.repository.PreferenceManagerRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -29,7 +30,25 @@ class PreferenceManagerRepositoryImpl @Inject constructor(
         token[refreshTokenKey] ?: ""
     }
 
-    override suspend fun getAccessToken(): String = accessToken.first()
+    private val phoneKey = stringPreferencesKey("phone_key")
+
+    private val phone = context.dataStore.data.map { phone ->
+        phone[phoneKey] ?: ""
+    }
+
+    private val nameKey = stringPreferencesKey("name_key")
+
+    private val name = context.dataStore.data.map { name ->
+        name[nameKey] ?: ""
+    }
+
+    private val loginKey = stringPreferencesKey("login_key")
+
+    private val login = context.dataStore.data.map { login ->
+        login[loginKey] ?: ""
+    }
+
+    override suspend fun getAccessToken(): Flow<String> = accessToken
 
     override suspend fun setAccessToken(accessToken: String) {
         context.dataStore.edit { token ->
@@ -44,4 +63,26 @@ class PreferenceManagerRepositoryImpl @Inject constructor(
             token[refreshTokenKey] = refreshToken
         }
     }
+
+    override suspend fun setDataUser(
+        phone: String,
+        name: String,
+        login: String,
+        refreshToken: String,
+        accessToken: String
+    ) {
+        context.dataStore.edit { prefs ->
+            prefs[nameKey] = name
+            prefs[phoneKey] = phone
+            prefs[loginKey] = login
+            prefs[refreshTokenKey] = refreshToken
+            prefs[accessTokenKey] = accessToken
+        }
+    }
+
+    override suspend fun getPhone(): String = phone.first()
+
+    override suspend fun getName(): String = name.first()
+
+    override suspend fun getLogin(): String = login.first()
 }

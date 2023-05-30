@@ -1,6 +1,5 @@
 package com.greenhouses.presentation.screen.registration
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -25,7 +24,7 @@ class RegistrationViewModel @AssistedInject constructor(
     fun sendUserInfo(name: String, login: String) {
         viewModelScope.launch {
             val validName = name.isNotEmpty()
-            val validLogin = (login.isValidLogin() && login.isNotEmpty())
+            val validLogin = login.isValidLogin()
             if (validLogin && validName) {
                 _command.emit(RegistrationCommand.Loading)
                 runCatching {
