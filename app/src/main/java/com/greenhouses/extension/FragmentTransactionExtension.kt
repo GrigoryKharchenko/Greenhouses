@@ -12,3 +12,10 @@ inline fun <reified F : Fragment> Fragment.addFragmentWithArgs(containerId: Int,
         replace<F>(containerId, args = args)
     }
 }
+
+inline fun <reified F : Fragment> Fragment.replaceFragmentWithArgs(containerId: Int, args: Bundle) {
+    parentFragmentManager.commit {
+        setReorderingAllowed(true)
+        replace<F>(containerId, args = args)
+    }
+}

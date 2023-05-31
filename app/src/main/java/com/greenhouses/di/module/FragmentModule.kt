@@ -2,6 +2,7 @@ package com.greenhouses.di.module
 
 import com.greenhouses.presentation.screen.authorization.AuthorizationFragment
 import com.greenhouses.presentation.screen.codeconfirm.CodeConfirmFragment
+import com.greenhouses.presentation.screen.registration.RegistrationFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -13,4 +14,7 @@ interface FragmentModule {
 
     @ContributesAndroidInjector
     fun bindCodeConformFragment(): CodeConfirmFragment
+
+    @ContributesAndroidInjector
+    fun bindRegistrationFragment(): RegistrationFragment
 }

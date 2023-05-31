@@ -5,12 +5,6 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/groupSuccess"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:constraint_referenced_ids="tilCodeConform,btnConformCode" />
-
-    <androidx.constraintlayout.widget.Group
         android:id="@+id/groupError"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -38,17 +32,6 @@
             android:maxLength="6"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnConformCode"
-        style="@style/OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_16"
-        android:text="@string/send_code_confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilCodeConform" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvError"
