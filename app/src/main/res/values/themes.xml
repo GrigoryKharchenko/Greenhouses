@@ -20,6 +20,10 @@
         <item name="android:textColor">@color/black_text_color</item>
     </style>
 
+    <style name="Text.Black.14">
+        <item name="android:textSize">@dimen/sp_14</item>
+    </style>
+
     <style name="Text.Black.16">
         <item name="android:textSize">@dimen/sp_16</item>
     </style>

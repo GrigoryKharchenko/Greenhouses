@@ -1,8 +1,10 @@
 package com.greenhouses.di.module
 
 import com.greenhouses.data.GreenhousesApi
+import com.greenhouses.domain.repository.InterceptorRepository
 import dagger.Module
 import dagger.Provides
+import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -16,9 +18,16 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient(): OkHttpClient =
+    fun provideHttpClient(
+        interceptorRepository: InterceptorRepository,
+        authenticator: Authenticator
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor { chain ->
+                interceptorRepository.addInterceptorToken(chain)
+            }
+            .authenticator(authenticator)
             .build()
 
     @Singleton

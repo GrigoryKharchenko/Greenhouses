@@ -1,6 +1,5 @@
 package com.greenhouses.data.interactor
 
-import com.greenhouses.data.response.UserResponse
 import com.greenhouses.domain.interactor.AuthorizationInteractor
 import com.greenhouses.domain.model.CodeConfirmModel
 import com.greenhouses.domain.repository.AuthorizationRepository
@@ -19,10 +18,14 @@ class AuthorizationInteractorImpl @Inject constructor(
         )
     }
 
-    override suspend fun sendUserInfo(phone: String, name: String, login: String): UserResponse {
+    override suspend fun sendUserInfo(phone: String, name: String, login: String) {
         val request = authorizationRepository.sendUserInfo(phone, name, login)
-        preferenceManagerRepository.setAccessToken(request.accessToken)
-        preferenceManagerRepository.setRefreshToken(request.refreshToken)
-        return UserResponse(refreshToken = request.refreshToken, accessToken = request.accessToken, userId = request.userId)
+        preferenceManagerRepository.setDataUser(
+            phone = phone,
+            name = name,
+            login = login,
+            refreshToken = request.refreshToken,
+            accessToken = request.accessToken
+        )
     }
 }

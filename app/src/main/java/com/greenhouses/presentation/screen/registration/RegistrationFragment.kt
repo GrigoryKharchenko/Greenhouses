@@ -12,8 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.greenhouses.R
 import com.greenhouses.databinding.FragmentRegistrationBinding
+import com.greenhouses.extension.addFragment
 import com.greenhouses.extension.launchWhenStarted
 import com.greenhouses.presentation.screen.codeconfirm.CodeConfirmFragment
+import com.greenhouses.presentation.screen.profile.ProfileFragment
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -93,10 +95,12 @@ class RegistrationFragment : Fragment(), HasAndroidInjector {
 
     private fun handleCommand(command: RegistrationCommand) {
         when (command) {
-            RegistrationCommand.OpenProfileScreen -> {}
+            RegistrationCommand.OpenProfileScreen -> {
+                openProfileScreen()
+            }
             RegistrationCommand.Error -> {
                 binding.flProgress.isVisible = false
-                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_toast), Toast.LENGTH_SHORT).show()
             }
             RegistrationCommand.Loading -> binding.flProgress.isVisible = true
             is RegistrationCommand.ErrorValidationUiModel -> {
@@ -104,6 +108,10 @@ class RegistrationFragment : Fragment(), HasAndroidInjector {
                 binding.tilLogin.error = command.loginMessage?.let(::getString)
             }
         }
+    }
+
+    private fun openProfileScreen() {
+        addFragment<ProfileFragment>(containerId = R.id.container)
     }
 
     private fun goBack() {

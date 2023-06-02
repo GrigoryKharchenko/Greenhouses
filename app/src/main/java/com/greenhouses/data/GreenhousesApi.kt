@@ -2,12 +2,17 @@ package com.greenhouses.data
 
 import com.greenhouses.data.request.CodeRequest
 import com.greenhouses.data.request.PhoneRequest
+import com.greenhouses.data.request.RefreshTokenRequest
 import com.greenhouses.data.request.UserRequest
+import com.greenhouses.data.request.UserUpdatedRequest
 import com.greenhouses.data.response.CodeResponse
 import com.greenhouses.data.response.PhoneResponse
-import com.greenhouses.data.response.UserResponse
+import com.greenhouses.data.response.ProfileDataResponse
+import com.greenhouses.data.response.TokenResponse
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface GreenhousesApi {
 
@@ -24,5 +29,18 @@ interface GreenhousesApi {
     @POST("api/v1/users/register/")
     suspend fun sendUserRegister(
         @Body userRequest: UserRequest
-    ): UserResponse
+    ): TokenResponse
+
+    @GET("api/v1/users/me/")
+    suspend fun getProfile(): ProfileDataResponse
+
+    @PUT("api/v1/users/me/")
+    suspend fun updateProfile(
+        @Body userUpdatedRequest: UserUpdatedRequest
+    )
+
+    @POST("api/v1/users/refresh-token/")
+    suspend fun sendRefreshToken(
+        @Body phoneRequest: RefreshTokenRequest
+    ): TokenResponse
 }

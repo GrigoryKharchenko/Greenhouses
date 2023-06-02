@@ -19,3 +19,18 @@ inline fun <reified F : Fragment> Fragment.replaceFragmentWithArgs(containerId: 
         replace<F>(containerId, args = args)
     }
 }
+
+inline fun <reified F : Fragment> Fragment.addFragment(containerId: Int) {
+    parentFragmentManager.commit {
+        setReorderingAllowed(true)
+        addToBackStack(F::class.java.simpleName)
+        replace<F>(containerId)
+    }
+}
+
+inline fun <reified F : Fragment> Fragment.replaceFragment(containerId: Int) {
+    parentFragmentManager.commit {
+        setReorderingAllowed(true)
+        replace<F>(containerId)
+    }
+}

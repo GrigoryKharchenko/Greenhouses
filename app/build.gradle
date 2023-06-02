@@ -61,4 +61,7 @@ dependencies {
 
     // DataStore
     implementation "androidx.datastore:datastore-preferences:$datastore_version"
+
+    //Mask
+    implementation "ru.tinkoff.decoro:decoro:$maskVersion"
 }
