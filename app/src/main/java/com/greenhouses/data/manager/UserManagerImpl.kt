@@ -9,10 +9,10 @@ class UserManagerImpl @Inject constructor(
     private val preferenceManagerRepository: PreferenceManagerRepository
 ) : UserManager {
 
-    override suspend fun authorized(): Flow<String> =
-        preferenceManagerRepository.getAccessToken()
+    override suspend fun isAuthorized(): Boolean =
+        preferenceManagerRepository.isAuthorized()
 
     override suspend fun logOut() {
-        preferenceManagerRepository.setAccessToken("")
+        preferenceManagerRepository.clear()
     }
 }

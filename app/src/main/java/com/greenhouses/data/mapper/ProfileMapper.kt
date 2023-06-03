@@ -1,20 +1,28 @@
 package com.greenhouses.data.mapper
 
-import com.greenhouses.data.response.ProfileResponse
 import com.greenhouses.data.response.ProfileDataResponse
-import com.greenhouses.presentation.screen.profile.ProfileDataModel
+import com.greenhouses.presentation.model.UserInfoModel
 import com.greenhouses.presentation.screen.profile.ProfileModel
+import com.greenhouses.presentation.util.decodeToBitmap
 
-fun ProfileDataResponse.mapToModel(): ProfileDataModel =
-    ProfileDataModel(profileModel = profileResponse.mapToProfileModel())
-
-fun ProfileResponse.mapToProfileModel(): ProfileModel =
+fun UserInfoModel.mapToProfileModel(): ProfileModel =
     ProfileModel(
-        id = id,
         name = name,
-        username = username,
-        birthday = birthday ?: "",
-        city = city ?: "",
-        avatar = avatar ?: "",
-        phone = phone
+        username = login,
+        birthday = birthday,
+        city = city,
+        avatar = avatar.decodeToBitmap(),
+        phone = phone,
+    )
+
+fun ProfileDataResponse.mapToUserInfoModel(): UserInfoModel =
+    UserInfoModel(
+        name = profileResponse.name,
+        city = profileResponse.city ?: "",
+        birthday = profileResponse.birthday ?: "",
+        //Отличются данные аватара, которые отправляются и получаются с бэка
+        //Поэтому аватар отображаться не будет после запроса getUserInfo
+        avatar = profileResponse.avatar ?: "",
+        phone = profileResponse.phone,
+        login = profileResponse.username,
     )

@@ -39,15 +39,17 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/dp_16">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivAvatar"
-                android:layout_width="@dimen/dp_100"
-                android:layout_height="@dimen/dp_100"
+                android:layout_width="@dimen/dp_150"
+                android:layout_height="@dimen/dp_150"
                 android:layout_marginTop="@dimen/dp_16"
-                android:src="@drawable/ic_avatar"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_camera_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/CircleImageView" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvTitleName"

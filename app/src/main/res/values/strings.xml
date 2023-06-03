@@ -3,6 +3,7 @@
     <string name="refresh">Обновить</string>
     <string name="error">Извините, что-то пошло не так.\nМы работаем над тем, чтобы\nисправить это как можно скорее.</string>
     <string name="error_toast">Извините, что-то пошло не так.</string>
+    <string name="error_code">Неверный код</string>
 
     <!-- Authorization -->
     <string name="authorization_title">Авторизация пользователя</string>

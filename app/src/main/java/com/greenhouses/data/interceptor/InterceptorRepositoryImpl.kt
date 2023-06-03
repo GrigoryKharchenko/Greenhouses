@@ -13,7 +13,7 @@ class InterceptorRepositoryImpl @Inject constructor(
 ) : InterceptorRepository {
 
     override fun addInterceptorToken(chain: Interceptor.Chain): Response {
-        val token = runBlocking { preferenceManagerRepository.getAccessToken().first() }
+        val token = runBlocking { preferenceManagerRepository.subscribeToGetAccessToken().first() }
         val request = chain.request().newBuilder().addHeader(
             "Authorization",
             "Bearer $token"

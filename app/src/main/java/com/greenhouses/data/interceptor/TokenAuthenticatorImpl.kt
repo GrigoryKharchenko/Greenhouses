@@ -1,5 +1,6 @@
 package com.greenhouses.data.interceptor
 
+import com.greenhouses.domain.manager.UserManager
 import com.greenhouses.domain.repository.AuthorizationRepository
 import com.greenhouses.domain.repository.PreferenceManagerRepository
 import dagger.Lazy
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class TokenAuthenticatorImpl @Inject constructor(
     private val preferenceManagerRepository: PreferenceManagerRepository,
+    private val userManager: UserManager,
     private val authorizationRepository: Lazy<AuthorizationRepository>
 ) : Authenticator {
 
@@ -24,8 +26,7 @@ class TokenAuthenticatorImpl @Inject constructor(
                 preferenceManagerRepository.setRefreshToken(token.refreshToken)
                 response.request.newBuilder().header("Authorization", "Bearer ${token.refreshToken}").build()
             } catch (e: Exception) {
-                preferenceManagerRepository.setAccessToken("")
-                preferenceManagerRepository.setRefreshToken("")
+                userManager.logOut()
                 null
             }
         }

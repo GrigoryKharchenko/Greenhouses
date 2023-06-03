@@ -7,10 +7,10 @@ data class UserUpdatedRequest(
     @SerializedName("name") val name: String,
     @SerializedName("city") val city: String,
     @SerializedName("birthday") val birthday: String,
-    @SerializedName("vk") val vk: String,
-    @SerializedName("instagram") val instagram: String,
-    @SerializedName("status") val status: String,
-    // @SerializedName("avatar") val avatarRequest: AvatarRequest,
+    @SerializedName("avatar") val avatarRequest: AvatarRequest,
+    @SerializedName("vk") val vk: String = "",
+    @SerializedName("instagram") val instagram: String = "",
+    @SerializedName("status") val status: String = "",
 )
 
 data class AvatarRequest(

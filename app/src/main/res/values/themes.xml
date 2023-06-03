@@ -52,4 +52,9 @@
     <style name="TitleToolbar.TextBlack">
         <item name="titleTextColor">@color/black_text_color</item>
     </style>
+
+    <style name="CircleImageView">
+        <item name="cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
 </resources>

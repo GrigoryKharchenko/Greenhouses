@@ -22,23 +22,6 @@ class AuthorizationRepositoryImpl @Inject constructor(
     override suspend fun checkAuthCode(phone: String, code: String): CodeResponse =
         greenhousesApi.checkAuthCode(CodeRequest(phone = phone, code = code))
 
-    override suspend fun sendUserInfo(phone: String, name: String, login: String): TokenResponse =
-        greenhousesApi.sendUserRegister(UserRequest(phone = phone, name = name, username = login))
-
-    override suspend fun updateUserInfo(name: String, city: String, birthday: String, login: String) {
-        greenhousesApi.updateProfile(
-            UserUpdatedRequest(
-                name = name,
-                city = city,
-                birthday = birthday,
-                username = login,
-                vk = "",
-                instagram = "",
-                status = ""
-            )
-        )
-    }
-
     override suspend fun sendRefreshToken(refreshToken: String): TokenResponse =
         greenhousesApi.sendRefreshToken(RefreshTokenRequest(refreshToken))
 }
