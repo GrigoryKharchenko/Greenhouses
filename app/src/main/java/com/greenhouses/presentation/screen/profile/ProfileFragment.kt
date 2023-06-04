@@ -82,6 +82,7 @@ class ProfileFragment : BaseFragment() {
             tvName.text = successState.profileModel.name
             tvPhone.text = successState.profileModel.phone
             successState.profileModel.avatar?.let(ivAvatar::setImageBitmap)
+            tvZodiac.text = getString(successState.profileModel.zodiac)
         }
     }
 

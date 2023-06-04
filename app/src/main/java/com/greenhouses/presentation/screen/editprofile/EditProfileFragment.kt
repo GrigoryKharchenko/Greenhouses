@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.greenhouses.R
 import com.greenhouses.databinding.FragmentEditProfileBinding
 import com.greenhouses.di.ViewModelFactory
+import com.greenhouses.extension.formatDateValue
 import com.greenhouses.extension.launchWhenStarted
 import com.greenhouses.presentation.base.BaseFragment
 import java.util.Calendar
@@ -137,8 +138,8 @@ class EditProfileFragment : BaseFragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            binding.etBirthday.setText("$year-$month-$day")
+        DatePickerDialog(requireContext(), { _, currentYear, currentMonth, currentDay ->
+            binding.etBirthday.setText("$currentYear-${(currentMonth + 1).formatDateValue()}-${currentDay.formatDateValue()}")
         }, year, month, day).show()
     }
 
