@@ -27,12 +27,13 @@ class UserInteractorImpl @Inject constructor(
         userRepository.updateUserInfo(userUpdatedRequest)
     }
 
-    override suspend fun updateDataUserInfo(name: String, city: String, birthday: String, photoBase64: String) {
+    override suspend fun updateDataUserInfo(name: String, city: String, birthday: String, photoBase64: String, zodiac: Int) {
         preferenceManagerRepository.updateDataUserInfo(
             name = name,
-            city = city,
             birthday = birthday,
+            city = city,
             photoBase64 = photoBase64,
+            zodiac = zodiac
         )
     }
 

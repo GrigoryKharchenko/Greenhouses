@@ -1,13 +1,13 @@
 package com.greenhouses.presentation.screen.editprofile
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.greenhouses.R
 import com.greenhouses.data.request.AvatarRequest
 import com.greenhouses.data.request.UserUpdatedRequest
 import com.greenhouses.domain.interactor.UserInteractor
+import com.greenhouses.domain.service.ZodiacService
 import com.greenhouses.presentation.util.decodeToBitmap
 import com.greenhouses.presentation.util.encodeToBase64
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,6 +20,7 @@ import javax.inject.Inject
 
 class EditProfileViewModel @Inject constructor(
     private val userInteractor: UserInteractor,
+    private val zodiacService: ZodiacService,
 ) : ViewModel() {
 
     private val _command = MutableSharedFlow<EditProfileCommand>()
@@ -91,15 +92,18 @@ class EditProfileViewModel @Inject constructor(
                             city = city,
                             birthday = birthday,
                             username = login,
-                            avatarRequest = AvatarRequest("", photoBase64)
+                            avatarRequest = AvatarRequest("", photoBase64),
                         )
                     )
                 }.onSuccess {
+                    val day = birthday.substring(startIndex = 8, endIndex = 10).toInt()
+                    val month = birthday.substring(startIndex = 5, endIndex = 7).toInt()
                     userInteractor.updateDataUserInfo(
                         name = name,
                         city = city,
                         birthday = birthday,
                         photoBase64 = photoBase64,
+                        zodiac = zodiacService.checkZodiac(day, month)
                     )
                     _command.emit(EditProfileCommand.OpenProfileScreen)
                 }.onFailure {

@@ -31,6 +31,7 @@ interface PreferenceManagerRepository {
         name: String,
         birthday: String,
         city: String,
-        photoBase64: String
+        photoBase64: String,
+        zodiac: Int
     )
 }

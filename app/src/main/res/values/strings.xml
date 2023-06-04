@@ -4,6 +4,7 @@
     <string name="error">Извините, что-то пошло не так.\nМы работаем над тем, чтобы\nисправить это как можно скорее.</string>
     <string name="error_toast">Извините, что-то пошло не так.</string>
     <string name="error_code">Неверный код</string>
+    <string name="empty" />
 
     <!-- Authorization -->
     <string name="authorization_title">Авторизация пользователя</string>
@@ -41,4 +42,19 @@
     <string name="edit_name">Введите имя</string>
     <string name="edit_city">Введите город</string>
     <string name="edit_birthday">Введите дату рождения</string>
+
+    <!-- Zodiac -->
+    <string name="zodiac_aquaris">Водолей</string>
+    <string name="zodiac_pisces">Рыбы</string>
+    <string name="zodiac_capricon">Козерог</string>
+    <string name="zodiac_sagittarius">Стрелец</string>
+    <string name="zodiac_scorpio">Скорпион</string>
+    <string name="zodiac_libra">Весы</string>
+    <string name="zodiac_virgo">Дева</string>
+    <string name="zodiac_leo">Лев</string>
+    <string name="zodiac_cancer">Рак</string>
+    <string name="zodiac_gemini">Близнецы</string>
+    <string name="zodiac_taurus">Телец</string>
+    <string name="zodiac_laries">Овен</string>
+    <string name="zodiac_error">Произошла ошибка</string>
 </resources>

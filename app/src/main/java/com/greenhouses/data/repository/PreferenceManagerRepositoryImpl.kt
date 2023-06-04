@@ -107,7 +107,11 @@ class PreferenceManagerRepositoryImpl @Inject constructor(
 
     override suspend fun setDataUser(userInfoModel: UserInfoModel) {
         context.dataStore.edit { prefs ->
-            prefs[userInfoKey] = convertUserInfoToGson(userInfoModel)
+            val updateUserInfo = prefs[userInfoKey]?.let {
+                val savedUserInfo = getUserInfoFromJson(it)
+                userInfoModel.copy(zodiac = savedUserInfo.zodiac)
+            } ?: userInfoModel
+            prefs[userInfoKey] = convertUserInfoToGson(updateUserInfo)
         }
     }
 
@@ -115,13 +119,15 @@ class PreferenceManagerRepositoryImpl @Inject constructor(
         name: String,
         birthday: String,
         city: String,
-        photoBase64: String
+        photoBase64: String,
+        zodiac: Int
     ) {
         val userInfo = getUserInfoFromJson(userInfo.first()).copy(
             name = name,
             birthday = birthday,
             city = city,
-            avatar = photoBase64
+            avatar = photoBase64,
+            zodiac = zodiac
         )
         context.dataStore.edit { prefs ->
             prefs[userInfoKey] = convertUserInfoToGson(userInfo)

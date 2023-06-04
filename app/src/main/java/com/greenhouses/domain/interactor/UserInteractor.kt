@@ -9,7 +9,7 @@ interface UserInteractor {
 
     suspend fun updateUserInfo(userUpdatedRequest: UserUpdatedRequest)
 
-    suspend fun updateDataUserInfo(name: String, city: String, birthday: String, photoBase64: String)
+    suspend fun updateDataUserInfo(name: String, city: String, birthday: String, photoBase64: String,zodiac:Int)
 
     suspend fun getUserInfo(): UserInfoModel
 }
