@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.greenhouses.R
 import com.greenhouses.domain.interactor.AuthorizationInteractor
+import com.greenhouses.domain.interactor.UserInteractor
+import com.greenhouses.domain.repository.PreferenceManagerRepository
 import com.greenhouses.extension.isValidLogin
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -14,26 +16,39 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class RegistrationViewModel @AssistedInject constructor(
-    private val authorizationInteractor: AuthorizationInteractor,
+    private val preferenceManagerRepository: PreferenceManagerRepository,
+    private val userInteractor: UserInteractor,
     @Assisted private val phoneNumber: String
 ) : ViewModel() {
 
     private val _command = MutableSharedFlow<RegistrationCommand>()
     val command = _command.asSharedFlow()
 
-    fun sendUserInfo(name: String, login: String) {
+    fun perform(event: RegistrationEvent) {
+        when (event) {
+            is RegistrationEvent.SendUserInfo -> {
+                sendUserInfo(
+                    name = event.name,
+                    login = event.login
+                )
+            }
+        }
+    }
+
+    private fun sendUserInfo(name: String, login: String) {
         viewModelScope.launch {
             val validName = name.isNotEmpty()
             val validLogin = login.isValidLogin()
             if (validLogin && validName) {
                 _command.emit(RegistrationCommand.Loading)
                 runCatching {
-                    authorizationInteractor.sendUserInfo(
+                    userInteractor.sendUserInfo(
                         phone = phoneNumber,
                         name = name,
                         login = login
                     )
                 }.onSuccess {
+                    preferenceManagerRepository.setAuthorized(true)
                     _command.emit(RegistrationCommand.OpenProfileScreen)
                 }.onFailure {
                     _command.emit(RegistrationCommand.Error)

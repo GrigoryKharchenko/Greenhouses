@@ -1,31 +1,30 @@
 package com.greenhouses.presentation.screen.editprofile
 
-import android.content.Context
+import android.Manifest
+import android.app.DatePickerDialog
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.greenhouses.R
 import com.greenhouses.databinding.FragmentEditProfileBinding
 import com.greenhouses.di.ViewModelFactory
 import com.greenhouses.extension.launchWhenStarted
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import dagger.android.support.AndroidSupportInjection
+import com.greenhouses.presentation.base.BaseFragment
+import java.util.Calendar
 import javax.inject.Inject
 
-class EditProfileFragment : Fragment(), HasAndroidInjector {
+class EditProfileFragment : BaseFragment() {
 
     private var _binding: FragmentEditProfileBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var defaultViewModelFactory: ViewModelFactory
@@ -34,12 +33,18 @@ class EditProfileFragment : Fragment(), HasAndroidInjector {
         ViewModelProvider(this, defaultViewModelFactory)[EditProfileViewModel::class.java]
     }
 
-    override fun androidInjector(): AndroidInjector<Any> = androidInjector
+    private val previewImage =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, uri)
+            viewModel.perform(EditProfileEvent.SetAvatar(bitmap))
+        }
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                openGallery()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +59,7 @@ class EditProfileFragment : Fragment(), HasAndroidInjector {
         super.onViewCreated(view, savedInstanceState)
         initUi()
         launchWhenStarted(viewModel.command, ::handleCommand)
+        launchWhenStarted(viewModel.state, ::handleState)
     }
 
     override fun onDestroyView() {
@@ -68,15 +74,21 @@ class EditProfileFragment : Fragment(), HasAndroidInjector {
     private fun handleCommand(command: EditProfileCommand) {
         when (command) {
             EditProfileCommand.OpenProfileScreen -> goBack()
-            EditProfileCommand.Error -> {
-                binding.groupError.isVisible = true
-                binding.groupSuccess.isVisible = false
-            }
-            is EditProfileCommand.ErrorValidationUiModel -> {
-                binding.tilName.error = command.nameMessage?.let(::getString)
-                binding.tilCity.error = command.cityMessage?.let(::getString)
-                binding.tilBirthday.error = command.birthdayMessage?.let(::getString)
-            }
+        }
+    }
+
+    private fun handleState(state: EditProfileState) {
+        with(binding) {
+            tilName.error = state.nameMessage?.let(::getString)
+            tilCity.error = state.cityMessage?.let(::getString)
+            tilBirthday.error = state.birthdayMessage?.let(::getString)
+            groupError.isVisible = state.isError
+            groupSuccess.isVisible = state.isSuccess
+            etCity.setText(state.city)
+            etBirthday.setText(state.birthday)
+            etName.setText(state.name)
+            ivAvatar.setImageBitmap(state.avatar)
+            flProgress.isVisible = state.isLoading
         }
     }
 
@@ -95,20 +107,53 @@ class EditProfileFragment : Fragment(), HasAndroidInjector {
             etCity.doAfterTextChanged {
                 tilCity.error = null
             }
+            ivAvatar.setOnClickListener {
+                openGallery()
+            }
+            etBirthday.setOnClickListener {
+                openDatePicker()
+            }
             toolBar.setNavigationOnClickListener { goBack() }
             toolBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.save -> {
-                        viewModel.updateUserInfo(
-                            name = etName.text.toString(),
-                            city = etCity.text.toString(),
-                            birthday = etBirthday.text.toString()
+                        viewModel.perform(
+                            EditProfileEvent.UpdateUserInfo(
+                                name = etName.text.toString(),
+                                city = etCity.text.toString(),
+                                birthday = etBirthday.text.toString()
+                            )
                         )
                         true
                     }
                     else -> false
                 }
             }
+        }
+    }
+
+    private fun openDatePicker() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            binding.etBirthday.setText("$year-$month-$day")
+        }, year, month, day).show()
+    }
+
+    private fun hasGalleryPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun openGallery() {
+        if (hasGalleryPermission()) {
+            previewImage.launch("image/*")
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
     }
 }

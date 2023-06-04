@@ -16,17 +16,15 @@ class MainViewModel @Inject constructor(
     val command = _command.asSharedFlow()
 
     init {
-        checkToken()
+        isAuthorized()
     }
 
-    private fun checkToken() {
+    private fun isAuthorized() {
         viewModelScope.launch {
-            userManager.authorized().collect {
-                if (it.isEmpty()) {
-                    _command.emit(CommandActivity.OpenAuthorizationScreen)
-                } else {
-                    _command.emit(CommandActivity.OpenProfileScreen)
-                }
+            if (userManager.isAuthorized()) {
+                _command.emit(CommandActivity.OpenProfileScreen)
+            } else {
+                _command.emit(CommandActivity.OpenAuthorizationScreen)
             }
         }
     }

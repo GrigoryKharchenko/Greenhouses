@@ -7,6 +7,6 @@ sealed interface ProfileState {
     object Error : ProfileState
 
     data class Success(
-        val profileModel: ProfileDataModel
+        val profileModel: ProfileModel
     ) : ProfileState
 }

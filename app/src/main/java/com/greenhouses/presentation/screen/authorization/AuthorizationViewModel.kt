@@ -15,7 +15,15 @@ class AuthorizationViewModel @Inject constructor(
     private val _command = MutableSharedFlow<AuthorizationCommand>()
     val command = _command.asSharedFlow()
 
-    fun sendPhoneNumber(phoneNumber: String) {
+    fun perform(event: AuthorizationEvent) {
+        when (event) {
+            is AuthorizationEvent.SendPhoneNumber -> {
+                sendPhoneNumber(event.phoneNumber)
+            }
+        }
+    }
+
+    private fun sendPhoneNumber(phoneNumber: String) {
         viewModelScope.launch {
             runCatching {
                 authorization.sendPhoneNumber(phoneNumber)

@@ -6,5 +6,5 @@ interface AuthorizationInteractor {
 
     suspend fun checkAuthCode(phone: String, code: String): CodeConfirmModel
 
-    suspend fun sendUserInfo(phone: String, name: String, login: String)
+    suspend fun setAuthorized(isAuthorized: Boolean)
 }

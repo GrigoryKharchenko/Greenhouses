@@ -1,6 +1,5 @@
 package com.greenhouses.presentation.screen.codeconfirm
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,28 +7,21 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.greenhouses.R
 import com.greenhouses.databinding.FragmentCodeConfirmBinding
+import com.greenhouses.extension.addNewChainFragment
 import com.greenhouses.extension.launchWhenStarted
-import com.greenhouses.extension.replaceFragment
 import com.greenhouses.extension.replaceFragmentWithArgs
+import com.greenhouses.presentation.base.BaseFragment
 import com.greenhouses.presentation.screen.profile.ProfileFragment
 import com.greenhouses.presentation.screen.registration.RegistrationFragment
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class CodeConfirmFragment : Fragment(), HasAndroidInjector {
+class CodeConfirmFragment : BaseFragment() {
 
     private var _binding: FragmentCodeConfirmBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var viewModelFactory: CodeConfirmViewModel.Factory
@@ -40,13 +32,6 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
 
     private val viewModel: CodeConfirmViewModel by viewModels {
         CodeConfirmViewModel.provideFactory(viewModelFactory, phoneNumber)
-    }
-
-    override fun androidInjector(): AndroidInjector<Any> = androidInjector
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
     }
 
     override fun onCreateView(
@@ -62,7 +47,7 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
             etCodeConform.doAfterTextChanged { text ->
-                viewModel.checkCode(text.toString())
+                viewModel.perform(CodeConfirmEvent.CheckCode(text.toString()))
             }
             btnRefresh.setOnClickListener {
                 binding.groupError.isVisible = false
@@ -70,6 +55,7 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
             }
         }
         launchWhenStarted(viewModel.state, ::handleState)
+        launchWhenStarted(viewModel.command, ::handleCommand)
     }
 
     override fun onDestroyView() {
@@ -78,21 +64,25 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
     }
 
     private fun handleState(state: CodeConfirmState) {
-        when (state) {
-            is CodeConfirmState.CodeConfirm -> {
-                if (state.hasCodeError) {
-                    binding.etCodeConform.setText("")
-                }
+        with(binding) {
+            groupError.isVisible = state.isError
+            tilCodeConform.isVisible = !state.isError && !state.isLoading
+            if (state.hasCodeError) {
+                tilCodeConform.error = getString(R.string.error_code)
+                etCodeConform.setText("")
+            } else {
+                tilCodeConform.error = null
             }
-            CodeConfirmState.OpenRegistrationScreen -> {
+        }
+    }
+
+    private fun handleCommand(command: CodeConfirmCommand) {
+        when (command) {
+            CodeConfirmCommand.OpenRegistrationScreen -> {
                 openRegistrationScreen()
             }
-            CodeConfirmState.OpenProfileScreen -> {
+            CodeConfirmCommand.OpenProfileScreen -> {
                 openProfileScreen()
-            }
-            CodeConfirmState.Error -> {
-                binding.groupError.isVisible = true
-                binding.tilCodeConform.isVisible = false
             }
         }
     }
@@ -105,7 +95,7 @@ class CodeConfirmFragment : Fragment(), HasAndroidInjector {
     }
 
     private fun openProfileScreen() {
-        replaceFragment<ProfileFragment>(containerId = R.id.container)
+        addNewChainFragment<ProfileFragment>(containerId = R.id.container)
     }
 
     companion object {

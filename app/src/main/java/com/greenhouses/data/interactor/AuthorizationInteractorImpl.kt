@@ -13,19 +13,18 @@ class AuthorizationInteractorImpl @Inject constructor(
 
     override suspend fun checkAuthCode(phone: String, code: String): CodeConfirmModel {
         val request = authorizationRepository.checkAuthCode(phone, code)
+
+        if (!request.refreshToken.isNullOrEmpty() && !request.accessToken.isNullOrEmpty()) {
+            preferenceManagerRepository.setRefreshToken(request.refreshToken)
+            preferenceManagerRepository.setAccessToken(request.accessToken)
+        }
+
         return CodeConfirmModel(
             isUserExist = request.isUserExists,
         )
     }
 
-    override suspend fun sendUserInfo(phone: String, name: String, login: String) {
-        val request = authorizationRepository.sendUserInfo(phone, name, login)
-        preferenceManagerRepository.setDataUser(
-            phone = phone,
-            name = name,
-            login = login,
-            refreshToken = request.refreshToken,
-            accessToken = request.accessToken
-        )
+    override suspend fun setAuthorized(isAuthorized: Boolean) {
+        preferenceManagerRepository.setAuthorized(isAuthorized)
     }
 }
